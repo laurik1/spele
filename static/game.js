@@ -23,6 +23,13 @@ document.addEventListener("DOMcontentLoaded", function() {
     spelesLauks.innerHTML = '';
 laukumiSajaukti.forEarch((emoji, index) => {
     let bloks = document.createElement("div")
+    blok .classList.add("bloks");
+    bloks.setAttribute("data-index", index);
+    bloks.addEventListener("click", function() {
+        veiktGajienu(bloks,)
+
+
+
 })
 
 function veiktGajienu(laukums)

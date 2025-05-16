@@ -1,0 +1,45 @@
+import sqlite3
+
+# 1. Izveidojam savienojumu ar datubāzi un izveidojam tabulu
+conn = sqlite3.connect('ire.db')  # Savienojamies ar datubāzi (tā tiks izveidota, ja tās vēl nav)
+cursor = conn.cursor()
+
+# Izveidojam tabulu dzivokli, ja tā vēl neeksistē
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS dzivokli (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    adrese TEXT,
+    isatbas TEXT,
+    maksa REAL
+)
+''')
+
+# 2. Pievienojam 5 ierakstus
+dzivokli = [
+    ('Riga, Brivibas iela 10', '2 istabas', 300),
+    ('Jurmala, Meza iela 3', '3 istabas', 450),
+    ('Liepaja, Lielais iela 7', '1 istaba', 200),
+    ('Riga, Lielvarde iela 15', '2 istabas', 350),
+    ('Daugavpils, Skolas iela 5', '1 istaba', 150)
+]
+
+cursor.executemany('''
+INSERT INTO dzivokli (adrese, isatbas, maksa)
+VALUES (?, ?, ?)
+''', dzivokli)
+
+# Saglabājam izmaiņas
+conn.commit()
+
+# 3. Parādām dārgāko īres maksu
+cursor.execute('SELECT * FROM dzivokli ORDER BY maksa DESC LIMIT 1')
+dargakais_dzivoklis = cursor.fetchone()
+
+# Izvadām rezultātu
+print("Dārgākais dzīvoklis:")
+print(f"Adrese: {dargakais_dzivoklis[1]}")
+print(f"Istabas: {dargakais_dzivoklis[2]}")
+print(f"Maksa: {dargakais_dzivoklis[3]} EUR")
+
+# Aizveram savienojumu ar datubāzi
+conn.close()

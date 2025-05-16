@@ -1,0 +1,18 @@
+import sqlite3
+DB = 'dati.db'
+conn = sqlite3.connect (DB)
+cursor = conn.cursor()
+dati = []
+for i in range(5):
+    print(f'\Ievadi {i+1}. ierakstu:')
+    vards = input('Vārds:')
+    uzvards = input('Uzvards:')
+    rezultats = int(input('Rezultats: '))
+    dati.append((vards, uzvards, rezultats))
+cursor. executemany('''
+    INSERT INTO rezultati (vards, uzvards, rezultats)
+    VALUES (?, ?, ?)
+''', dati)
+conn.commit()
+conn.close()
+print('Tikai pievienoti 5 ieraksti.')
